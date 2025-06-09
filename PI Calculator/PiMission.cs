@@ -38,32 +38,27 @@ namespace PI_Calculator
 
             return 4.0 * result.Count() / SampleSize;
         }
-        public async Task EstimatePiWithForEachAsync(long samplesize)
+        public async Task<double> EstimatePiWithForEachAsync(long samplesize)
         {
             long insideCircle = 0;
-            object lockObj = new();
 
             await Parallel.ForAsync(0, samplesize, async (batch, ct) =>
             {
 
                 Random random = new(Guid.NewGuid().GetHashCode());
-
-
                 double x = random.NextDouble();
                 double y = random.NextDouble();
+
                 if (x * x + y * y <= 1)
                 {
-                    lock (lockObj)
-                    {
-                        insideCircle++;
-                    }
+                    Interlocked.Increment(ref insideCircle);    
                 }
-
 
                 await ValueTask.CompletedTask;
             });
 
             double result = 4.0 * insideCircle / samplesize;
+            return await Task.FromResult(result);   
             //PIResponse response = new PIResponse { SampleSize = (int)samplesize, Value = result };
             //EventHandlers.Notify(response);
         }

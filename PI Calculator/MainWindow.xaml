@@ -11,6 +11,7 @@
             <Label Content="Sample Size"></Label>
             <TextBox x:Name="sampleSizeText" Text="10000"></TextBox>
             <Button Content="Add" Click="Button_Click"></Button>
+            <Button Content="Start" Click="Stop_Click"></Button>
         </StackPanel>
         <StackPanel>
             <Grid Background="#D9EAFB" Margin="0,5">

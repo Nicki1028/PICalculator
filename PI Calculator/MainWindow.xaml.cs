@@ -26,6 +26,7 @@ namespace PI_Calculator
         CalcuatorViewModel calcuatorViewModel = new CalcuatorViewModel();
         private System.Threading.Timer? Timer;
         private readonly ICalculatorPresenter presenter;
+        
 
         Dictionary<long, PIModel> items = new Dictionary<long, PIModel>();
         public MainWindow(DIContainer.PresenterFactory factory)
@@ -34,6 +35,7 @@ namespace PI_Calculator
             this.DataContext = calcuatorViewModel;
             presenter = factory.Create<ICalculatorPresenter, ICalculatorView>(this);
             Timer = new System.Threading.Timer(x => presenter.FetchCompletedPiResults(), null, 1000, 1000);
+           
         }
     
 
@@ -56,6 +58,17 @@ namespace PI_Calculator
         public void UpdatePIResult(List<PIModel> pIModels)
         {
             calcuatorViewModel.datas = pIModels;
+        }
+
+        private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            string content = btn.Content.ToString() == "Start" ? "Stop" : "Start";
+
+            btn.Content = content;
+            bool activate = content == "Stop" ? true : false;  
+            presenter.ActivateServiceRunning(activate);
+
         }
     }
 }

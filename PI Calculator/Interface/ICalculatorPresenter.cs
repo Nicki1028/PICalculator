@@ -13,5 +13,7 @@ namespace PI_Calculator.Interface
 
         void AddMission(long samplesize);
 
+        void ActivateServiceRunning(bool activate);
+
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PI_Calculator
 {
-    public class PIService:IPIService
+    public class PIService : IPIService
     {
         ConcurrentQueue<long> queue = new ConcurrentQueue<long>();
         ConcurrentDictionary<long, PIModel> keyValuePairs = new ConcurrentDictionary<long, PIModel>();
@@ -33,32 +33,38 @@ namespace PI_Calculator
 
         }
 
-        public async void Start()
+        public async void Start(CancellationToken token)
         {
             
-            _ = Task.Run(() =>
+            var temp  = Task.Run(() =>
             {
 
                 while (true)
                 {
+                    if (token.IsCancellationRequested)
+                    {
+                        break;
+                    }
                     if (queue.Count > 0)
                     {
                         queue.TryDequeue(out long sampleSize);
-                        PiMission piMission = new PiMission(sampleSize);
-                        double result = piMission.Calculate();
-                        PIModel pIModel = new PIModel(sampleSize, DateTime.Now, result);
-                        keyValuePairs[sampleSize] = pIModel;
-                        cache.Add(pIModel);
-                        
+                        Task.Run(async () =>
+                        {
+                            PiMission piMission = new PiMission(sampleSize);
+                            double result = await piMission.EstimatePiWithForEachAsync(sampleSize);
+                            PIModel pIModel = new PIModel(sampleSize, DateTime.Now, result);
+                            keyValuePairs[sampleSize] = pIModel;
+                            cache.Add(pIModel);
+                        });
+
                     }
 
                 }
             });
-        }
 
-        public void Stop()
-        {
             
         }
+
+       
     }
 }

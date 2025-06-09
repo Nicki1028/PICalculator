@@ -12,12 +12,13 @@ namespace PI_Calculator
     {
         private readonly ICalculatorView _view;
         private readonly IPIService _service;
-
+        CancellationTokenSource cts = new CancellationTokenSource();
         public CalculatorPresenter(ICalculatorView view, IPIService service)
         {
             _view = view;
             _service = service;
-            _service.Start();
+            _service.Start(cts.Token);
+          
         }
 
         public void AddMission(long sampleSize)
@@ -30,6 +31,24 @@ namespace PI_Calculator
         {
             _view.UpdatePIResult(_service.GetResult());
         }
+
+
+
+
+        // 幫我根據這個函數的行為重新命名這個函數名稱
+        public void ActivateServiceRunning(bool activate)
+        {
+            if (activate)
+            {
+                cts = new CancellationTokenSource();
+                _service.Start(cts.Token);
+            }
+            else
+            {
+                cts.Cancel();
+            }
+        }
+        
 
     }
 }
