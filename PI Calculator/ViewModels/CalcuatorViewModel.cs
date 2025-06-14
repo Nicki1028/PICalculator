@@ -22,9 +22,9 @@ namespace PI_Calculator.ViewModels
                     if ( model != null)
                     {
                         model.Value = item.Value;
-                        model.Time = item.Time;                      
+                        model.Time = item.Time; 
+                        model.Status = item.Status;
                     }
-
                 }
             }
         }

@@ -13,6 +13,7 @@ namespace PI_Calculator
         private readonly ICalculatorView _view;
         private readonly IPIService _service;
         CancellationTokenSource cts = new CancellationTokenSource();
+        
         public CalculatorPresenter(ICalculatorView view, IPIService service)
         {
             _view = view;
@@ -20,20 +21,14 @@ namespace PI_Calculator
             _service.Start(cts.Token);
           
         }
-
-        public void AddMission(long sampleSize)
+        public PIModel AddMission(long sampleSize)
         {
-            _service.PiMissionRequest(sampleSize);
+            return _service.PiMissionRequest(sampleSize);
         }
-       
-
         public void FetchCompletedPiResults()
         {
             _view.UpdatePIResult(_service.GetResult());
         }
-
-
-
 
         // 幫我根據這個函數的行為重新命名這個函數名稱
         public void ActivateServiceRunning(bool activate)

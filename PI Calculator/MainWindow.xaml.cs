@@ -26,8 +26,6 @@ namespace PI_Calculator
         CalcuatorViewModel calcuatorViewModel = new CalcuatorViewModel();
         private System.Threading.Timer? Timer;
         private readonly ICalculatorPresenter presenter;
-        
-
         Dictionary<long, PIModel> items = new Dictionary<long, PIModel>();
         public MainWindow(DIContainer.PresenterFactory factory)
         {
@@ -37,8 +35,7 @@ namespace PI_Calculator
             Timer = new System.Threading.Timer(x => presenter.FetchCompletedPiResults(), null, 1000, 1000);
            
         }
-    
-
+ 
         private void Button_Click(object sender, RoutedEventArgs e)
         {            
             this.Timerextention(() =>
@@ -46,11 +43,11 @@ namespace PI_Calculator
                 long size = long.Parse(sampleSizeText.Text);
                 if (!items.ContainsKey(size))
                 {
-                    PIModel pIModel = new PIModel(size, DateTime.Now, 0);
+                    PIModel pIModel = presenter.AddMission(size);
                     calcuatorViewModel.Add(pIModel);
-                    items.Add(size, pIModel);
+                    items.Add(size, pIModel);                    
+                   
                 }                             
-                presenter.AddMission(size);
             });
 
         }
@@ -69,6 +66,13 @@ namespace PI_Calculator
             bool activate = content == "Stop" ? true : false;  
             presenter.ActivateServiceRunning(activate);
 
+        }
+
+        private void StopTask_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            CancellationTokenSource tokenSource = (CancellationTokenSource)btn.Tag;
+            tokenSource.Cancel();
         }
     }
 }

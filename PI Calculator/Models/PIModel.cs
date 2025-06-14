@@ -45,11 +45,41 @@ namespace PI_Calculator.Models
                 OnPropertyChanged();
             }
         }
+        private string _status;
+        public string Status
+        {
+            get => _status; 
+            set
+            {
+                _status = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private CancellationTokenSource? _cancellationTokenSource;
+        public CancellationTokenSource? CancellationTokenSource
+        {
+            get => _cancellationTokenSource;
+            set
+            {
+                _cancellationTokenSource = value;
+                OnPropertyChanged();
+            }
+        }
+        public PIModel(long sampleSize, DateTime time, double value, string status, CancellationTokenSource? cancellationTokenSource)
+        {
+            this.SampleSize = sampleSize;
+            this.Time = time;
+            this.Value = value;
+            this.Status = status;
+            this.CancellationTokenSource = cancellationTokenSource;
+        }
         public PIModel(long sampleSize, DateTime time, double value)
         {
             this.SampleSize = sampleSize;
             this.Time = time;
             this.Value = value;
+            this.Status = "Pending";
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

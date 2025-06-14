@@ -9,8 +9,8 @@ namespace PI_Calculator.Interface
 {
     public interface IPIService
     {
-        public void Start(CancellationToken token);
+        Task Start(CancellationToken token);
         public List<PIModel> GetResult();
-        public void PiMissionRequest(long samplesize);
+        public PIModel PiMissionRequest(long samplesize);
     }
 }

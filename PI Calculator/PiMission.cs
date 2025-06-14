@@ -1,9 +1,11 @@
-﻿using System;
+﻿using PI_Calculator.Models;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace PI_Calculator
 {
@@ -34,17 +36,20 @@ namespace PI_Calculator
 
                 }
             });
-
-
             return 4.0 * result.Count() / SampleSize;
         }
-        public async Task<double> EstimatePiWithForEachAsync(long samplesize)
+        public async Task EstimatePiWithForEachAsync(PIModel pIModel)
         {
             long insideCircle = 0;
-
-            await Parallel.ForAsync(0, samplesize, async (batch, ct) =>
+            pIModel.Status = "Running";
+            await Parallel.ForAsync(0, pIModel.SampleSize, pIModel.CancellationTokenSource.Token, async (batch, ct) =>
             {
 
+                if (pIModel.CancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    pIModel.Status = "Cancelled";
+                    return;
+                }
                 Random random = new(Guid.NewGuid().GetHashCode());
                 double x = random.NextDouble();
                 double y = random.NextDouble();
@@ -57,8 +62,9 @@ namespace PI_Calculator
                 await ValueTask.CompletedTask;
             });
 
-            double result = 4.0 * insideCircle / samplesize;
-            return await Task.FromResult(result);   
+            double result = 4.0 * insideCircle / pIModel.SampleSize;
+            pIModel.Value = result;
+            pIModel.Status = "Completed";
             //PIResponse response = new PIResponse { SampleSize = (int)samplesize, Value = result };
             //EventHandlers.Notify(response);
         }

@@ -19,10 +19,12 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Sample" FontWeight="Bold" Grid.Column="0"/>
                 <TextBlock Text="Time" FontWeight="Bold" Grid.Column="1"/>
                 <TextBlock Text="Value" FontWeight="Bold" Grid.Column="2"/>
+                <TextBlock Text="Status" FontWeight="Bold" Grid.Column="3"/>
             </Grid>
             <ItemsControl ItemsSource="{Binding collections}">
                 <ItemsControl.ItemTemplate>
@@ -33,10 +35,14 @@
                                     <ColumnDefinition Width="100"/>
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding SampleSize}" Grid.Column="0"/>
                                 <TextBlock Text="{Binding Time}" Grid.Column="1"/>
                                 <TextBlock Text="{Binding Value}" Grid.Column="2"/>
+                                <TextBlock Text="{Binding Status}" Grid.Column="3"/>
+                                <Button Content="Stop"  Grid.Column="4" Click="StopTask_Click" Tag="{Binding CancellationTokenSource}" />
                             </Grid>
                         </Border>
                     </DataTemplate>

@@ -11,9 +11,10 @@ namespace PI_Calculator.Interface
     {
         void FetchCompletedPiResults();
 
-        void AddMission(long samplesize);
+        PIModel AddMission(long samplesize);
 
         void ActivateServiceRunning(bool activate);
+
 
     }
 }
